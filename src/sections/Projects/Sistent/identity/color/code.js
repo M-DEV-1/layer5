@@ -23,9 +23,53 @@ import { Col, Row } from "../../../../../reusecore/Layout";
 import Button from "../../../../../reusecore/Button";
 import { useStyledDarkMode } from "../../../../../theme/app/useStyledDarkMode";
 
+import { styled, Table, TableContainer, TableCell, TableRow, TableHead, TableBody, useTheme } from "@layer5/sistent";
+
+const brandColors = [
+  { tokenName: "keppel-70", token: "theme.palette.brand.default", name: "Keppel", hex: "#daf3eb" },
+  { tokenName: "keppel-60", token: "theme.palette.brand.hover", name: "Keppel", hex: "#93e5d1" },
+  { tokenName: "keppel-50", token: "theme.palette.brand.pressed", name: "Keppel", hex: "#41ccb3" },
+  { tokenName: "keppel-40", token: "theme.palette.brand.secondary", name: "Keppel", hex: "#00b39f" },
+  { tokenName: "keppel-30", token: "theme.palette.brand.tertiary", name: "Keppel", hex: "#007763" },
+  { tokenName: "keppel-20", token: "theme.palette.keppel[20]", name: "Keppel", hex: "#006651" },
+  { tokenName: "keppel-10", token: "theme.palette.keppel[10]", name: "Keppel", hex: "#00403f" },
+];
+
+const PreviewBox = styled("div")(({ theme, bgcolor }) => ({
+  backgroundColor: bgcolor,
+  width: "1.6rem",
+  height: "1.6rem",
+  borderRadius: "6px",
+  border: `1px solid ${theme.palette.divider}`,
+  boxShadow: "inset 0 0 3px rgba(0,0,0,0.15)",
+  margin: "0 auto",
+}));
+
+const StyledTableContainer = styled(TableContainer)(() => ({
+  width: "100%",
+  backgroundColor: "transparent",
+  boxShadow: "none",
+  padding: 0,
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: "0.875rem",
+  padding: "0.75rem",
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
+
+const StyledHeaderCell = styled(StyledTableCell)({
+  fontWeight: 600,
+});
+
 const ColorCode = () => {
   const { isDark } = useStyledDarkMode();
   const location = useLocation();
+  const theme = useTheme();
+
+  const white = theme.palette.background.constant.white;
+  const tableGrey = theme.palette.background.constant.table;
   return (
     <SistentLayout title="Color">
       <div className="content">
@@ -89,13 +133,39 @@ const ColorCode = () => {
             not have any role descriptions.
           </p>
           <h3>Brand Colors</h3>
-          <Row className="image-container" $Hcenter>
-            <Col md={8} lg={8} sm={12}>
-              <img
-                width="100%"
-                src={isDark ? BrandColorsDark : BrandColors}
-                alt="Brand colors"
-              />
+          <Row className="table-container" $Hcenter>
+            <Col md={12} sx={{ px: 0 }}>
+              <StyledTableContainer>
+                <Table size="small" aria-label="brand-colors">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: isDark ? tableGrey : white }}>
+                      <StyledHeaderCell>Token Name</StyledHeaderCell>
+                      <StyledHeaderCell>Name</StyledHeaderCell>
+                      <StyledHeaderCell>Hex Code</StyledHeaderCell>
+                      <StyledHeaderCell>Sistent Token</StyledHeaderCell>
+                      <StyledHeaderCell align="center">Preview</StyledHeaderCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {brandColors.map((col, idx) => (
+                      <TableRow
+                        key={col.tokenName}
+                        sx={{ backgroundColor: idx % 2 === 0 ? white : tableGrey }}
+                      >
+                        <StyledTableCell>{col.tokenName}</StyledTableCell>
+                        <StyledTableCell>{col.name}</StyledTableCell>
+                        <StyledTableCell>{col.hex}</StyledTableCell>
+                        <StyledTableCell sx={{ fontFamily: "monospace" }}>
+                          {col.token}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <PreviewBox bgcolor={col.hex} />
+                        </StyledTableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </StyledTableContainer>
             </Col>
           </Row>
           <h3>Greyscale Colors</h3>
