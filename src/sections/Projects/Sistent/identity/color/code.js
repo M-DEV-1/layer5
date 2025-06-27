@@ -23,7 +23,7 @@ import { Col, Row } from "../../../../../reusecore/Layout";
 import Button from "../../../../../reusecore/Button";
 import { useStyledDarkMode } from "../../../../../theme/app/useStyledDarkMode";
 
-import { styled, Table, TableContainer, TableCell, TableRow, TableHead, TableBody, useTheme } from "@layer5/sistent";
+import { styled, Table, TableContainer, TableCell, TableRow, TableHead, TableBody, useTheme } from "@sistent/sistent";
 
 const brandColors = [
   { tokenName: "keppel-70", token: "theme.palette.brand.default", name: "Keppel", hex: "#daf3eb" },
